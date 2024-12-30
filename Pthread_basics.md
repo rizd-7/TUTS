@@ -132,11 +132,98 @@ int main() {
     return 0;
 }
 ```
+---
+## 6. Synchronization with Join 
+Using a Join to prevent parent finishing before children:
+example run this multiple time to see that at any time count is printed 
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+#define N 10
+
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+int count=0;
+
+
+void* sayHello(){
+    printf("hello world! \n");
+
+    pthread_mutex_lock (&mutex1);
+    count ++;
+    pthread_mutex_unlock (&mutex1);
+
+    pthread_exit(NULL);
+}
+
+int main()
+{
+    pthread_t threads[N];
+
+    int i;
+    for(i=0;i<N;i++){
+        pthread_create(&threads[i],NULL,sayHello,NULL);
+    }
+
+
+    printf("%d ",count);
+
+    pthread_exit(NULL);
+
+    return 0;
+}
+
+```
+Now run this ; 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+#define N 10
+
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+int count=0;
+
+
+void* sayHello(){
+    printf("hello world! \n");
+
+    pthread_mutex_lock (&mutex1);
+    count ++;
+    pthread_mutex_unlock (&mutex1);
+
+    pthread_exit(NULL);
+}
+
+int main()
+{
+    pthread_t threads[N];
+
+    int i;
+    for(i=0;i<N;i++){
+        pthread_create(&threads[i],NULL,sayHello,NULL);
+    }
+
+    for(i=0;i<N;i++){
+        pthread_join(threads[i],NULL);
+    }
+
+    printf("%d ",count);
+
+
+    return 0;
+}
+```
+
 
 ---
 
-## 5. Synchronization with Mutex
+## 6. Synchronization with Mutex
 Using a mutex to protect shared data and avoid race conditions:
+
 
 ```c
 #include <stdio.h>
@@ -170,7 +257,7 @@ int main() {
 
 ---
 
-## 6. Full Example: Array Processing with Threads
+## 7. Full Example: Array Processing with Threads
 This example demonstrates dividing work among threads, using a mutex to update a global sum.
 
 ```c
