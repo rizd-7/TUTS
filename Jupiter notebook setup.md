@@ -46,3 +46,7 @@ jupyter notebook
 ```
 
 Your Jupyter Notebook is now set up and ready to use! 🚀
+
+### Note that you have to enable Scripts execution in you system ,if you have not done t yet juste run this command in powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
